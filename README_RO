@@ -1,0 +1,99 @@
+Florea Andrei-Bogdan, 313CD
+
+Functia main
+
+Am alocat memorie pentru caile spre fisierele necesare si apoi le-am citit
+din fisierul input.txt. Am citit fisierul bmp si am rezolvat, pe rand,
+cerintele, alocand pentru fiecare dintre ele un bitmap.
+Calea la care am scris fisierele BMP am obtinut-o din calea spre fisierul
+.bmp original, concatenat cu sufixul specific cerintei.
+Am dezalocat toate zonele de memorie alocate dinamic.
+
+Citirea si afisarea unui fisier BMP
+
+Pentru citire, am deschis fisierul binar aferent caii specificate.
+Am citit header-ul si infoheader-ul, si am alocat memorie pentru bitmap, si
+am calculat cati octeti de padding se afla la finalul fiecarei linii din
+bitmap. Am citit linie cu linie "pixelii" si i-am stocat in bitmap. La
+finalul fiecarei linii, cu functia fseek, am "sarit" peste un numar de biti
+egal cu padding-ul calculat precedent.
+Pentru stocarea bitmap-ului, am folosit o structura "pixel", care contine
+campurile B, G si R. (in aceasta ordine, pentru a facilita citirea)
+
+Pentru afisare, am scris header-ul si infoheader-ul in fisierul de la calea
+obtinuta in main. Am calculat din nou cat padding trebuie scris la finalul
+fiecarei linii. Am afisat linie cu linie bitmap-ul, la finalul fiecarei
+linii completand cu un numar de octeti de 0 egal cu acel padding.
+
+
+Task 1: Black&White
+
+Am alocat memorie pentru un bitmap nou. Am parcurs bitmap-ul initial si
+pentru pixelul curent, am calculat tonul lui corespunzator de gri. Am
+atribuit aceasta valoare in pozitia corespunzatoare din noul bitmap.
+Am scris apoi fisierul <test>_black_white.bmp.
+
+
+Task 2: No-Crop
+
+Am aflat maximul dintre inaltimea si latimea imaginii (size), si am alocat
+memorie pentru un bitmap de dimensiune size x size. Daca inaltimea era mai
+mica, completam imaginea sus si jos cu alb. Daca latimea era mai mica,
+completam la stanga si la dreapta.
+Am aflat cate randuri/coloane trebuie completate, si cate dintre acestea
+in zona de sus/stanga. Am parcurs bitmap-ul, si, daca linia/coloana curenta
+era in zona ce trebuia completata, am atribuit in pozitia corespunzatoare
+din noul bitmap pixelul (255, 255, 255). Altfel, am copiat pixelul
+corespunzator din bitmap-ul initial.
+La final, am actualizat informatiile legate de dimensiuni din infoheader.
+Am scris apoi fisierul <test>_nocrop.bmp.
+
+
+Task 3: Convolutional Layers
+
+Am alocat memorie pentru matricea filtrului (si am citit-o) si pentru 
+bitmap-ul nou. Am parcurs bitmap-ul si, pentru fiecare pixel, am
+initializat cu 0 cele 3 valori ale noului pixel: newR, newG, newB.
+Am parcurs matricea filtrului pentru pixelul curent si am calculat linia
+si coloana din bitmap-ul initial, corespunzator pozitiei curente din
+matricea filtrului, inmultind valorile pixelului respectiv cu valoarea
+curenta a filtrului (daca pozitia in cadrul bitmap-ului initial era una 
+valida), si adaugand rezultatul la valorile noului pixel. La finalul 
+parcurgerii filtrului, am "normalizat" valorile noului pixel (cele <0 
+le-am facut 0 si cele >255 le-am facut 255). Am atribuit, apoi, in 
+bitmap-ul nou, pixelul calculat. Am scris in fisierul <test>_filter.bmp.
+
+
+Task 4: Min/Max Pooling Layer
+
+Am alocat memorie pentru noul bitmap. In mod asemanator cu task-ul 
+precedent, am parcurs bitmap-ul, si am initializat cu (255, 255, 255)
+sau (0, 0, 0) valorile din noul pixel curent, in functie de tipul
+pooling-ului (min si, respectiv, max). Pentru fiecare pozitie din
+matricea de pooling, am calculat linia si coloana din bitmap-ul initial
+corespunzator pozitiei din matricea de pooling. Am actualizat valorile
+noului pixel (daca pozitia din cadrul bitmap-ului initial era una valida).
+Am atribuit, in bitmap-ul nou, pixelul calculat si am scris in fisierul
+<test>_pooling.bmp.
+
+
+Task 5: Clustering
+
+Am alocat memorie pentru o matrice care retine daca un pixel din cadrul
+bitmap-ului a fost utilizat intr-o zona, si am alocat memorie si pentru
+noul bitmap. Am folosit doi vectori pentru directie (unul pentru deplasarea
+pe linie si unul pentru deplasarea pe coloana. Am folosit si o structura
+cu doua campuri de tip int, care semnifica o pozitie din cadrul bitmap-ului.
+Am parcurs pixelii din bitmap, incepand cu coltul stanga-jos (deoarece se
+dorea ca inceputul zonelor sa fie, in imagine, pe o linie cat mai mica si
+o coloana cat mai mica (in caz de egalitate pe linie). Daca pixelul curent
+nu era marcat ca fiind folosit in matricea creata la inceput, il marcam
+si il adaugam intr-o coada, contorizandu-l si pentru calculul sumelor
+RBG. Am folosit algoritmul lui Lee: cat timp mai aveam elemente in coada,
+parcurgeam vecinii primului element din coada si, daca erau pozitii valide,
+nu depaseau threshold-ul si nu erau folosite, le adaugam in coada,
+actualizand valorile sumelor RGB. Am determinat pixelul mediu (culoarea
+zonei curente), si am parcurs din nou elementele cozii pentru a atribui
+in bitmap-ul nou, pe pozitiile retinute in coada (pozitiile pixelilor din
+zona), acest pixel mediu.
+Am scris in fisierul <test>_cluster.bmp.

@@ -1,0 +1,4 @@
+input/images/test0.bmp
+input/filters/filter1.txt
+input/pooling/pooling0.txt
+input/clustering/cluster0.txt
