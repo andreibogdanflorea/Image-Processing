@@ -10,7 +10,7 @@ Firstly, edit the input.txt and make sure to use your desired image and editing 
 
 The rows in input.txt correspond to:
 * relative path to the image to be edited
-* relative path to  a file that contains the filter you want to use
+* relative path to a file that contains the filter you want to use
 * relative path to a file that contains the pooling parameters you want to use
 * relative path to a file that contains the clusering parameters you want to use
 
@@ -35,6 +35,8 @@ The text file with the clustering parameters you want to use must contain a posi
 the clustering threshold.
 
 To run the program, use either the Makefile, your IDE or terminal.
+
+A few sample images and filters/parameters files have been included in the input folder.
 <br><br><br>
 
 ## Output ##
